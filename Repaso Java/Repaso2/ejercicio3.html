@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registro de Usuario</h2>
+    <form id="registrationForm" onsubmit="return validateForm()">
+        <input type="text" id="nombre" placeholder="Nombre (requerido)">
+        <input type="text" id="apellido" placeholder="Apellido (requerido)">
+        <input type="email" id="email" placeholder="Correo electrónico (requerido)">
+        <input type="text" id="direccion" placeholder="Dirección">
+        <input type="text" id="ciudad" placeholder="Ciudad">
+        <input type="tel" id="telefono" placeholder="Teléfono (10 dígitos)">
+        <input type="text" id="dni" placeholder="DNI (requerido)">
+        <input type="password" id="pin" placeholder="PIN (8 dígitos)">
+        <input type="password" id="pinRepetido" placeholder="Repetir PIN (8 dígitos)">
+        <button type="submit">Registrar</button>
+    </form>
+    <div id="mensaje" class="error"></div>
+    <div id="usuarioCreado" class="success"></div>
+</div>
+
+<script>
+    function validateForm() {
+        const nombre = document.getElementById('nombre').value.trim();
+        const apellido = document.getElementById('apellido').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const direccion = document.getElementById('direccion').value.trim();
+        const ciudad = document.getElementById('ciudad').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        const dni = document.getElementById('dni').value.trim();
+        const pin = document.getElementById('pin').value.trim();
+        const pinRepetido = document.getElementById('pinRepetido').value.trim();
+        const mensaje = document.getElementById('mensaje');
+        const usuarioCreado = document.getElementById('usuarioCreado');
+        
+        mensaje.textContent = '';
+        usuarioCreado.textContent = '';
+
+        // Validación de campos requeridos
+        if (!nombre || !apellido || !email || !dni || !pin || !pinRepetido) {
+            mensaje.textContent = 'Por favor, complete todos los campos requeridos.';
+            return false;
+        }
+
+        // Validación del DNI (longitud y solo números)
+        const dniPattern = /^[0-9]{8,10}$/;
+        if (!dniPattern.test(dni)) {
+            mensaje.textContent = 'El DNI debe tener entre 8 y 10 dígitos numéricos.';
+            return false;
+        }
+
+        // Validación del teléfono (10 dígitos)
+        const telefonoPattern = /^[0-9]{10}$/;
+        if (telefono && !telefonoPattern.test(telefono)) {
+            mensaje.textContent = 'El teléfono debe tener 10 dígitos.';
+            return false;
+        }
+
+        // Validación del PIN (8 dígitos) y coincidencia
+        const pinPattern = /^[0-9]{8}$/;
+        if (!pinPattern.test(pin) || pin !== pinRepetido) {
+            mensaje.textContent = 'El PIN debe tener 8 dígitos y coincidir en ambos campos.';
+            return false;
+        }
+
+        // Generar nombre de usuario
+        const usuario = nombre.slice(0, 2).toLowerCase() + apellido.slice(0, 2).toLowerCase() + telefono.slice(-3);
+        usuarioCreado.textContent = `Usuario creado: ${usuario}`;
+
+        return false; // Evita el envío real del formulario para solo mostrar el mensaje en pantalla
+    }
+</script>
+
+</body>
+</html>

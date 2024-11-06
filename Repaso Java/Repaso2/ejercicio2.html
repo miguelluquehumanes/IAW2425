@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .contenedor-mensaje {
+            width: 300px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .mensaje {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+        }
+        .boton-borrar {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Publicar Mensaje</h2>
+<input type="text" id="messageInput" placeholder="Escribe tu mensaje">
+<button onclick="añadirMensaje()">Añadir Mensaje</button>
+<button onclick="ordenarMensajes()">Ordenar A-Z</button>
+
+<div class="contenedor-mensaje" id="contenedorMensaje"></div>
+
+<script>
+    let mensajes = [];
+
+    function añadirMensaje() {
+        const messageInput = document.getElementById('messageInput');
+        const messageText = messageInput.value.trim();
+        
+        if (messageText) {
+            mensajes.push(messageText);
+            messageInput.value = ''; // Limpiar el campo
+            mostrarMensajes();
+        } else {
+            alert("Por favor, escribe un mensaje.");
+        }
+    }
+
+    function mostrarMensajes() {
+        const contenedorMensaje = document.getElementById('contenedorMensaje');
+        contenedorMensaje.innerHTML = ''; // Limpiar mensajes anteriores
+
+        mensajes.forEach((mensaje, index) => {
+            const mensajeDiv = document.createElement('div');
+            mensajeDiv.classList.add('mensaje');
+            mensajeDiv.innerHTML = `
+                <span>${mensaje}</span>
+                <span class="boton-borrar" onclick="borrarMensaje(${index})">🗑️</span>
+            `;
+            contenedorMensaje.appendChild(mensajeDiv);
+        });
+    }
+
+    function borrarMensaje(index) {
+        mensajes.splice(index, 1); // Eliminar mensaje del array
+        mostrarMensajes();
+    }
+
+    function ordenarMensajes() {
+        mensajes.sort(); // Ordenar mensajes alfabéticamente
+        mostrarMensajes();
+    }
+</script>
+
+</body>
+</html>
