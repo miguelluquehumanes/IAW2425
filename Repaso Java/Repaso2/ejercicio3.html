@@ -102,9 +102,9 @@
         }
 
         // Validación del teléfono (10 dígitos)
-        const telefonoPattern = /^[0-9]{10}$/;
+        const telefonoPattern = /^[0-9]{9}$/;
         if (telefono && !telefonoPattern.test(telefono)) {
-            mensaje.textContent = 'El teléfono debe tener 10 dígitos.';
+            mensaje.textContent = 'El teléfono debe tener 9 dígitos.';
             return false;
         }
 
