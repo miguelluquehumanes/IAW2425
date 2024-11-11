@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio de jQuery</title>
+    <script src="jquery-3.7.1.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+</head>
+<body>
+    <h1>Ejemplo de jQuery</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, architecto sapiente facilis amet voluptatibus odit est voluptatem illo soluta dolorum assumenda? Voluptatem perspiciatis quaerat voluptatum distinctio maxime vero animi debitis.</p>
+    <p class="par">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem facilis consequuntur accusantium fugiat libero, recusandae ipsam, error repellendus odit qui placeat aut assumenda culpa non, harum voluptatem? Praesentium, pariatur magnam.</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae nobis non beatae, vero neque dolor explicabo et, molestias saepe doloribus quia animi! Eaque, quis. Aut nulla earum debitis aspernatur voluptate?</p>
+    <p class="par">Hola ipsum dolor sit amet consectetur adipisicing elit. Possimus id tempora iure molestias non omnis? Provident quia magni itaque. Iusto, officia unde qui error incidunt blanditiis voluptate. Molestiae, architecto vitae.</p>
+    <button id="ocultar">Clic para ocultar jQuery</button>
+    <button id="mostrar">Clic para mostrar párrafo con jQuery</button>
+    <button id="alternar">Clic para alternar un párrafo con jQuery</button>
+    <script>
+        $(document).ready(function () {
+            //Cuando el sitio web se haya cargado por completo
+            $("#ocultar").click(function(){
+                $(".par").hide();
+            })
+            $("#mostrar").click(function(){
+                $(".par").show();
+            })
+            $("#alternar").click(function(){
+                $(".par").toogle();
+            })
+        });
+    </script>
+</body>
+</html>
