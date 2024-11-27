@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Países</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #countryInfo {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+        }
+        #countryInfo img {
+            width: 150px;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buscar Información de un País</h1>
+    <input type="text" id="countryName" placeholder="Introduce el nombre de un país">
+    <button id="searchCountry">Buscar</button>
+    <div id="countryInfo">
+        <h2 id="name"></h2>
+        <p><strong>Capital:</strong> <span id="capital"></span></p>
+        <p><strong>Población:</strong> <span id="population"></span></p>
+        <img id="flag" src="" alt="Bandera del país">
+    </div>
+    <p class="error" id="errorMessage" style="display: none;">País no encontrado. Intenta de nuevo.</p>
+
+    <script>
+        $(document).ready(function () {
+            $('#searchCountry').click(function () {
+                const country = $('#countryName').val().trim();
+                
+                if (country === "") {
+                    alert('Por favor, introduce el nombre de un país.');
+                    return;
+                }
+
+                // Realizar una petición AJAX para obtener la información del país
+                $.ajax({
+                    url: `https://restcountries.com/v3.1/name/${country}`,
+                    method: 'GET',
+                    success: function (data) {
+                        const countryData = data[0]; // Usamos el primer resultado
+
+                        // Mostrar la información del país
+                        $('#name').text(countryData.name.common);
+                        $('#capital').text(countryData.capital ? countryData.capital[0] : "N/A");
+                        $('#population').text(countryData.population.toLocaleString());
+                        $('#flag').attr('src', countryData.flags.svg).attr('alt', `Bandera de ${countryData.name.common}`);
+
+                        // Mostrar y ocultar secciones
+                        $('#countryInfo').show();
+                        $('#errorMessage').hide();
+                    },
+                    error: function () {
+                        // Mostrar mensaje de error si no se encuentra el país
+                        $('#countryInfo').hide();
+                        $('#errorMessage').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

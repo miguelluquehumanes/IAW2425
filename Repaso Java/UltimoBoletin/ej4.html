@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Info</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #pokemonInfo {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+        }
+        #pokemonInfo img {
+            width: 150px;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Información de Pokémon</h1>
+    <input type="text" id="pokemonInput" placeholder="Introduce el nombre o número del Pokémon">
+    <button id="searchPokemon">Buscar</button>
+    <div id="pokemonInfo">
+        <h2 id="name"></h2>
+        <p><strong>Número:</strong> <span id="number"></span></p>
+        <p><strong>Altura:</strong> <span id="height"></span> dm</p>
+        <p><strong>Peso:</strong> <span id="weight"></span> hg</p>
+        <p><strong>Tipos:</strong> <span id="types"></span></p>
+        <img id="sprite" src="" alt="Sprite del Pokémon">
+    </div>
+    <p class="error" id="errorMessage" style="display: none;">Pokémon no encontrado. Intenta de nuevo.</p>
+
+    <script>
+        $(document).ready(function () {
+            $('#searchPokemon').click(function () {
+                const input = $('#pokemonInput').val().trim().toLowerCase();
+
+                if (input === "") {
+                    alert('Por favor, introduce el nombre o número de un Pokémon.');
+                    return;
+                }
+
+                // Realizar una petición AJAX para obtener la información del Pokémon
+                $.ajax({
+                    url: `https://pokeapi.co/api/v2/pokemon/${input}`,
+                    method: 'GET',
+                    success: function (data) {
+                        // Mostrar la información del Pokémon
+                        $('#name').text(data.name.charAt(0).toUpperCase() + data.name.slice(1));
+                        $('#number').text(data.id);
+                        $('#height').text(data.height);
+                        $('#weight').text(data.weight);
+                        $('#types').text(data.types.map(type => type.type.name).join(', '));
+                        $('#sprite').attr('src', data.sprites.front_default).attr('alt', `Sprite de ${data.name}`);
+
+                        // Mostrar y ocultar secciones
+                        $('#pokemonInfo').show();
+                        $('#errorMessage').hide();
+                    },
+                    error: function () {
+                        // Mostrar mensaje de error si no se encuentra el Pokémon
+                        $('#pokemonInfo').hide();
+                        $('#errorMessage').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSONPlaceholder Posts</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #posts {
+            margin-top: 20px;
+        }
+        .post {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .post h3 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visualizar Posts</h1>
+    <button id="loadPosts">Cargar Posts</button>
+    <div id="posts"></div>
+
+    <script>
+        $(document).ready(function () {
+            $('#loadPosts').click(function () {
+                // Realizar una petición AJAX para obtener los posts
+                $.ajax({
+                    url: 'https://jsonplaceholder.typicode.com/posts',
+                    method: 'GET',
+                    success: function (data) {
+                        // Limpiar el contenedor antes de cargar los posts
+                        $('#posts').empty();
+
+                        // Recorrer los posts y mostrarlos en el contenedor
+                        data.forEach(post => {
+                            $('#posts').append(`
+                                <div class="post">
+                                    <h3>${post.title}</h3>
+                                    <p>${post.body}</p>
+                                </div>
+                            `);
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al cargar los posts. Inténtalo de nuevo.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

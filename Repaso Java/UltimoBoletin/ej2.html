@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fotos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #gallery {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .photo {
+            text-align: center;
+        }
+        .photo img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Galería de Fotos</h1>
+    <button id="loadGallery">Cargar Galería</button>
+    <div id="gallery"></div>
+
+    <script>
+        $(document).ready(function () {
+            $('#loadGallery').click(function () {
+                // Realizar una petición AJAX para obtener las fotos
+                $.ajax({
+                    url: 'https://jsonplaceholder.typicode.com/photos',
+                    method: 'GET',
+                    success: function (data) {
+                        // Limitar la galería a las primeras 20 fotos para evitar saturar la página
+                        const photos = data.slice(0, 20);
+
+                        // Limpiar el contenedor antes de cargar las fotos
+                        $('#gallery').empty();
+
+                        // Recorrer las fotos y mostrarlas en el contenedor
+                        photos.forEach(photo => {
+                            $('#gallery').append(`
+                                <div class="photo">
+                                    <img src="${photo.thumbnailUrl}" alt="${photo.title}">
+                                    <p>${photo.title}</p>
+                                </div>
+                            `);
+                        });
+                    },
+                    error: function () {
+                        alert('Hubo un error al cargar la galería. Inténtalo de nuevo.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
