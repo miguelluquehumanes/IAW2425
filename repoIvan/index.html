@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitio Web</title>
+    <style>
+        img{
+            width: 15%;
+            border-radius: 100%;
+            text-align: center;
+        }
+        div{
+            text-align: center;
+            margin: 2rem;
+        }
+        body{
+            margin: 0;
+            box-sizing: border-box;
+            padding: 1rem;
+            background-color:#140f2d;
+            color: white;
+            width: 100%;
+        }
+        #botones {
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            gap: 10px; 
+        }
+
+        button {
+            padding: 10px;
+            width: 25%;
+            border: none;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        
+        a{
+            text-decoration: none;
+            color: black;
+        }
+
+        #azul{background-color: #99F1C5;}
+        #amarillo{background-color: #f7f026;}
+        #morado{background-color: #973fdf;}
+        #azoscuro{background-color: #0f0ed4;}
+        #naranja{background-color: #ef591f;}
+        #azulcl{background-color: #86acdf;}
+
+    </style>
+</head>
+<body>
+    <div><img src="img/avatar.jpg" alt="avatar"></div>
+    <div>
+        <h1>Iván Téllez</h1>
+        ¡¿Qué tal hackers?!. Los lenguajes de programación que he dado son:
+        <div id="botones">
+            <button id="azul"><a href="https://www.docker.com/" target="_blank">Docker</a></button>
+            <button id="amarillo"><a href="https://developer.mozilla.org/es/docs/Web/JavaScript" target="_blank">Javascript</a></button>
+            <button id="morado"><a href="https://www.php.net/manual/es/intro-whatis.php" target="_blank">PHP</a></button>
+            <button id="azoscuro"><a href="https://jquery.com/" target="_blank">JQuery</a></button>
+            <button id="naranja"><a href="https://developer.mozilla.org/es/docs/Web/HTML" target="_blank">HTML</a></button>
+            <button id="azulcl"><a href="https://developer.mozilla.org/es/docs/Web/CSS" target="_blank">CSS</a></button>
+        </div>
+    </div>
+
+</body>
+</html>

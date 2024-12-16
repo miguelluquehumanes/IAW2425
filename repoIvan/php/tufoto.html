@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Tufoto</title>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            margin: 3rem;
+            max-width: 100vh;
+        }
+        label,input{margin: 0.7rem;}
+        #nombre{width: 300px;}
+        
+    </style>
+</head>
+<body>
+    <div id="contenido">
+        <form action="tufoto.php" method="post" id="formulario" enctype="multipart/form-data"/>
+            <label for="nombre">*Nombre:</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Introduce tu nombre" required>
+            <div id="texto">
+                <input type="file" name="archivo" id="archivo" required>
+            </div>
+            <input type="submit" name="enviar" value="Enviar">
+        </form>
+    </div>
+    
+</body>
+</html>

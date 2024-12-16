@@ -1,0 +1,7 @@
+body{display: grid; justify-content: center;}
+label{display: grid; grid-template-columns: 1fr; gap: 1rem;}
+#formulario{display: grid; width: max-content;}
+input span{margin-bottom: 1rem;}
+span{color: red; margin-bottom: 1rem;}
+.error{content: "Debes rellenar este campo"; color: red;}
+

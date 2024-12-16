@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de sesión</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Autenticación</title>
 </head>
 <body>
-    <h1>Sistema de autentificación</h1>
-    <form action="login.php" method="POST">
-        <input type="text" name="usuario" placeholder="Usuario">
-        <input type="password" name="pass">
-        <input type="submit" value="login">
-    </form>
-    <?php
-        if (isset($_POST["usuario"]) && isset($_POST["pass"])){
-            $usuario = htmlspecialchars($_POST["usuario"]);
-            $password = htmlspecialchars($_POST["pass"]);
-            if ($usuario=="admin" && $password=="H4CK3R4$1R")
-                echo "<p>Bienvenido amo</p>";
-            else
-                echo "<p>No puedes pasar hacker</p>";
-        }
-    ?>
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
+    <label for="usuario">Usuario:</label><input type="text" name="usuario"><br>
+    <label for="contrasena">Contraseña</label><input type="password" name="contrasena"><br>
+    <input type="submit" value="Login">
+</form>
+
+<?php
+if ($_POST){
+    $usuario = htmlspecialchars($_POST["usuario"]);
+    $contrasena = htmlspecialchars($_POST["contrasena"]);
+    if ($usuario == "admin" && $contrasena == "H4CK3R4$1R") {
+        echo "<p>Acceso concedido</p>";
+    }
+    else {
+        echo strcmp($_POST["usuario"],"") == 0 ? "<p>Debe introducir un nombre de usuario</p>" : "<p>Usuario y/o contraseña inválido</p>";
+        echo "<p>Acceso denegado</p>";
+    }
+}
+?>
+
 </body>
+
 </html>
