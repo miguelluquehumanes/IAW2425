@@ -18,6 +18,9 @@ if (!$enlace) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
+// Establecer la codificación de caracteres
+mysqli_set_charset($enlace, "utf8");
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar campos vacíos
     if (empty($_POST['titulo']) || empty($_POST['tipo']) || empty($_POST['departamento']) || empty($_POST['profesor_responsable']) || empty($_POST['trimestre']) || empty($_POST['fecha_inicio']) || empty($_POST['hora_inicio']) || empty($_POST['fecha_fin']) || empty($_POST['hora_fin']) || empty($_POST['organizador']) || empty($_POST['ubicacion']) || empty($_POST['coste']) || empty($_POST['total_alumnos']) || empty($_POST['objetivo'])) {

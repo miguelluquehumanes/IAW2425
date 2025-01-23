@@ -18,13 +18,17 @@ if (!$enlace) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
-$id = $_GET['id'];
-$query = "DELETE FROM actividades WHERE id='$id'";
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']); // Asegúrate de que el ID sea un número entero
+    $query = "DELETE FROM actividades WHERE id='$id'";
 
-if (mysqli_query($enlace, $query)) {
-    echo "Actividad eliminada correctamente.";
+    if (mysqli_query($enlace, $query)) {
+        echo "Actividad eliminada correctamente.";
+    } else {
+        echo "Error al eliminar la actividad: " . mysqli_error($enlace);
+    }
 } else {
-    echo "Error al eliminar la actividad: " . mysqli_error($enlace);
+    echo "Error: ID de actividad no proporcionado.";
 }
 
 mysqli_close($enlace);
