@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Conexión a la base de datos
 $servername = "sql308.thsite.top";
 $username = "thsi_38097508";
@@ -28,9 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resultado = mysqli_query($enlace, $query);
 
     if (mysqli_num_rows($resultado) > 0) {
-        echo "<p>Error: El usuario ya está registrado.</p>";
-    }
-    else{
+        $_SESSION['error_message'] = "Error: El usuario ya está registrado.";
+        header("Location: registro.php");
+        exit();
+    } else {
         // Cifrar la contraseña
         $password_encrypted = $password; // Sin cifrar (GRAN ERROR)
         // $password_encrypted = crypt($password, '$6$rounds=5000$' . uniqid(mt_rand(), true) . '$');
@@ -62,19 +65,90 @@ mysqli_close($enlace);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registro</title>
+    <title>Actividades I.E.S Antonio Machado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .container label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .container input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .container button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+        }
+        .container a {
+            margin-top: 20px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .container a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <form method="POST" action="registro.php">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre"><br>
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos"><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password"><br>
-        <button type="submit">Registrar</button>
-    </form>
+    <div class="container">
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <p class="error-message"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></p>
+        <?php endif; ?>
+
+        <h2>Actividades I.E.S Antonio Machado</h2>
+        <form method="POST" action="registro.php">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Registrar</button>
+        </form>
+        <a href="login.php">Iniciar sesión</a>
+    </div>
 </body>
 </html>
