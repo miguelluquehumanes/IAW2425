@@ -18,6 +18,9 @@ if (!$enlace) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
+// Establecer la codificación de caracteres
+mysqli_set_charset($enlace, "utf8");
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar campos vacíos
     if (empty($_POST['titulo']) || empty($_POST['tipo']) || empty($_POST['departamento']) || empty($_POST['profesor_responsable']) || empty($_POST['trimestre']) || empty($_POST['fecha_inicio']) || empty($_POST['hora_inicio']) || empty($_POST['fecha_fin']) || empty($_POST['hora_fin']) || empty($_POST['organizador']) || empty($_POST['ubicacion']) || empty($_POST['coste']) || empty($_POST['total_alumnos']) || empty($_POST['objetivo'])) {
@@ -25,22 +28,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Saneamiento de las entradas
-    $id = htmlspecialchars(trim($_POST['id']));
-    $titulo = htmlspecialchars(trim($_POST['titulo']));
-    $tipo = htmlspecialchars(trim($_POST['tipo']));
-    $departamento = htmlspecialchars(trim($_POST['departamento']));
-    $profesor_responsable = htmlspecialchars(trim($_POST['profesor_responsable']));
-    $trimestre = htmlspecialchars(trim($_POST['trimestre']));
-    $fecha_inicio = htmlspecialchars(trim($_POST['fecha_inicio']));
-    $hora_inicio = htmlspecialchars(trim($_POST['hora_inicio']));
-    $fecha_fin = htmlspecialchars(trim($_POST['fecha_fin']));
-    $hora_fin = htmlspecialchars(trim($_POST['hora_fin']));
-    $organizador = htmlspecialchars(trim($_POST['organizador']));
-    $acompañantes = htmlspecialchars(trim($_POST['acompañantes']));
-    $ubicacion = htmlspecialchars(trim($_POST['ubicacion']));
-    $coste = htmlspecialchars(trim($_POST['coste']));
-    $total_alumnos = htmlspecialchars(trim($_POST['total_alumnos']));
-    $objetivo = htmlspecialchars(trim($_POST['objetivo']));
+    $id = mysqli_real_escape_string($enlace, $_GET['id']); // Usar el ID de la URL
+    $titulo = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['titulo'])));
+    $tipo = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['tipo'])));
+    $departamento = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['departamento'])));
+    $profesor_responsable = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['profesor_responsable'])));
+    $trimestre = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['trimestre'])));
+    $fecha_inicio = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['fecha_inicio'])));
+    $hora_inicio = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['hora_inicio'])));
+    $fecha_fin = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['fecha_fin'])));
+    $hora_fin = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['hora_fin'])));
+    $organizador = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['organizador'])));
+    $acompañantes = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['acompañantes'])));
+    $ubicacion = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['ubicacion'])));
+    $coste = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['coste'])));
+    $total_alumnos = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['total_alumnos'])));
+    $objetivo = mysqli_real_escape_string($enlace, htmlspecialchars(trim($_POST['objetivo'])));
 
     // Actualizar datos en la base de datos
     $query = "UPDATE actividades SET titulo='$titulo', tipo='$tipo', departamento='$departamento', profesor_responsable='$profesor_responsable', trimestre='$trimestre', fecha_inicio='$fecha_inicio', hora_inicio='$hora_inicio', fecha_fin='$fecha_fin', hora_fin='$hora_fin', organizador='$organizador', acompañantes='$acompañantes', ubicacion='$ubicacion', coste='$coste', total_alumnos='$total_alumnos', objetivo='$objetivo' WHERE id='$id'";
@@ -53,10 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Obtener datos de la actividad
-$id = $_GET['id'];
-$query = "SELECT * FROM actividades WHERE id='$id'";
-$resultado = mysqli_query($enlace, $query);
-$actividad = mysqli_fetch_assoc($resultado);
+if (isset($_GET['id'])) {
+    $id = mysqli_real_escape_string($enlace, $_GET['id']);
+    $query = "SELECT * FROM actividades WHERE id='$id'";
+    $resultado = mysqli_query($enlace, $query);
+    $actividad = mysqli_fetch_assoc($resultado);
+} else {
+    echo "Error: ID de actividad no proporcionado.";
+    exit();
+}
 
 mysqli_close($enlace);
 ?>
@@ -68,8 +76,7 @@ mysqli_close($enlace);
 </head>
 <body>
     <h1>Modificar Actividad</h1>
-    <form method="POST" action="modificar_actividad.php">
-        <input type="hidden" name="id" value="<?php echo $actividad['id']; ?>">
+    <form method="POST" action="modificar_actividad.php?id=<?php echo $actividad['id']; ?>">
         <label for="titulo">Título:</label>
         <input type="text" id="titulo" name="titulo" value="<?php echo $actividad['titulo']; ?>" required><br>
         <label for="tipo">Tipo:</label>

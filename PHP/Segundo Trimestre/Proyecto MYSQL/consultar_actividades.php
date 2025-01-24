@@ -32,7 +32,6 @@ $resultado = mysqli_query($enlace, $query);
     <h1>Actividades Registradas</h1>
     <table border="1">
         <tr>
-            <th>ID</th>
             <th>Título</th>
             <th>Tipo</th>
             <th>Departamento</th>
@@ -52,7 +51,6 @@ $resultado = mysqli_query($enlace, $query);
         </tr>
         <?php while ($row = mysqli_fetch_assoc($resultado)): ?>
             <tr>
-                <td><?php echo $row['id']; ?></td>
                 <td><?php echo $row['titulo']; ?></td>
                 <td><?php echo $row['tipo']; ?></td>
                 <td><?php echo $row['departamento']; ?></td>
@@ -63,7 +61,7 @@ $resultado = mysqli_query($enlace, $query);
                 <td><?php echo $row['fecha_fin']; ?></td>
                 <td><?php echo $row['hora_fin']; ?></td>
                 <td><?php echo $row['organizador']; ?></td>
-                <td><?php echo $row['acompañantes']; ?></td>
+                <td><?php echo isset($row['acompañantes']) ? $row['acompañantes'] : 'N/A'; ?></td>
                 <td><?php echo $row['ubicacion']; ?></td>
                 <td><?php echo $row['coste']; ?></td>
                 <td><?php echo $row['total_alumnos']; ?></td>
