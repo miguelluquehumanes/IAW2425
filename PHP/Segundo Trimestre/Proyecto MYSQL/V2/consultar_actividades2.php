@@ -7,12 +7,18 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Obtener el campo de ordenación y la dirección
-$order_by = isset($_GET['order_by']) ? $_GET['order_by'] : 'titulo';
-$order_dir = isset($_GET['order_dir']) ? $_GET['order_dir'] : 'asc';
+$user_id = $_SESSION['user_id'];
+$query = "SELECT rol FROM usuarios WHERE id = '$user_id'";
+$result = mysqli_query($enlace, $query);
 
-// Consultar todas las actividades
-$query = "SELECT * FROM actividades ORDER BY $order_by $order_dir";
+if (mysqli_num_rows($result) === 1) {
+    $usuario = mysqli_fetch_assoc($result);
+    $es_administrador = $usuario['rol'] === 'administrador';
+} else {
+    die("Error: Usuario no encontrado.");
+}
+
+$query = "SELECT * FROM actividades";
 $resultado = mysqli_query($enlace, $query);
 ?>
 
@@ -86,27 +92,65 @@ $resultado = mysqli_query($enlace, $query);
             background-color: #0056b3;
         }
     </style>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("actividadesTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Actividades Registradas</h1>
-    <table border="1">
+    <table id="actividadesTable" border="1">
         <tr>
-            <th><a href="?order_by=titulo&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Título</a></th>
-            <th><a href="?order_by=tipo&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Tipo</a></th>
-            <th><a href="?order_by=departamento&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Departamento</a></th>
-            <th><a href="?order_by=profesor_responsable&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Profesor Responsable</a></th>
-            <th><a href="?order_by=trimestre&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Trimestre</a></th>
-            <th><a href="?order_by=fecha_inicio&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Fecha Inicio</a></th>
-            <th><a href="?order_by=hora_inicio&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Hora Inicio</a></th>
-            <th><a href="?order_by=fecha_fin&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Fecha Fin</a></th>
-            <th><a href="?order_by=hora_fin&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Hora Fin</a></th>
-            <th><a href="?order_by=organizador&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Organizador</a></th>
-            <th><a href="?order_by=acompañantes&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Acompañantes</a></th>
-            <th><a href="?order_by=ubicacion&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Ubicación</a></th>
-            <th><a href="?order_by=coste&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Coste</a></th>
-            <th><a href="?order_by=total_alumnos&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Total Alumnos</a></th>
-            <th><a href="?order_by=objetivo&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Objetivo</a></th>
-            <th><a href="?order_by=aprobada&order_dir=<?php echo $order_dir == 'asc' ? 'desc' : 'asc'; ?>">Aprobada</a></th>
+            <th onclick="sortTable(0)">Título</th>
+            <th onclick="sortTable(1)">Tipo</th>
+            <th onclick="sortTable(2)">Departamento</th>
+            <th onclick="sortTable(3)">Profesor Responsable</th>
+            <th onclick="sortTable(4)">Trimestre</th>
+            <th onclick="sortTable(5)">Fecha Inicio</th>
+            <th onclick="sortTable(6)">Hora Inicio</th>
+            <th onclick="sortTable(7)">Fecha Fin</th>
+            <th onclick="sortTable(8)">Hora Fin</th>
+            <th onclick="sortTable(9)">Organizador</th>
+            <th onclick="sortTable(10)">Acompañantes</th>
+            <th onclick="sortTable(11)">Ubicación</th>
+            <th onclick="sortTable(12)">Coste</th>
+            <th onclick="sortTable(13)">Total Alumnos</th>
+            <th onclick="sortTable(14)">Objetivo</th>
+            <th onclick="sortTable(15)">Aprobada</th>
             <th>Acciones</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($resultado)): ?>
@@ -128,8 +172,10 @@ $resultado = mysqli_query($enlace, $query);
                 <td><?php echo $row['objetivo']; ?></td>
                 <td><?php echo $row['aprobada'] ? 'Sí' : 'No'; ?></td>
                 <td>
-                    <a href="modificar_actividad2.php?id=<?php echo $row['id']; ?>" class="action-button">Modificar</a>
-                    <a href="eliminar_actividad2.php?id=<?php echo $row['id']; ?>" class="action-button">Eliminar</a>
+                    <?php if ($es_administrador): ?>
+                        <a href="modificar_actividad2.php?id=<?php echo $row['id']; ?>" class="action-button">Modificar</a>
+                        <a href="eliminar_actividad2.php?id=<?php echo $row['id']; ?>" class="action-button" onclick="return confirm('¿Estás seguro de que deseas eliminar esta actividad?');">Eliminar</a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endwhile; ?>
@@ -137,3 +183,7 @@ $resultado = mysqli_query($enlace, $query);
     <a href="dashboard2.php" class="back-link">Volver al Dashboard</a>
 </body>
 </html>
+
+<?php
+mysqli_close($enlace);
+?>

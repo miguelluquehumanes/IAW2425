@@ -3,28 +3,22 @@ session_start();
 include 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validar que los campos no estén vacíos
     if (empty($_POST['email']) || empty($_POST['password'])) {
         die("Error: Todos los campos son obligatorios.");
     }
 
-    // Saneamiento de las entradas
     $email = htmlspecialchars(trim($_POST['email']));
     $password = htmlspecialchars(trim($_POST['password']));
 
-    // Consultar el usuario por email
     $query = "SELECT * FROM usuarios WHERE email='$email'";
     $resultado = mysqli_query($enlace, $query);
 
     if (mysqli_num_rows($resultado) === 1) {
-        // Recuperar los datos del usuario
         $usuario = mysqli_fetch_assoc($resultado);
-
-        // Verificar la contraseña
         if (password_verify($password, $usuario['password'])) {
             $_SESSION['user_id'] = $usuario['id'];
             $_SESSION['user_name'] = $usuario['nombre'];
-            $_SESSION['user_rol'] = $usuario['rol'];
+            $_SESSION['user_role'] = $usuario['role'];
             header("Location: dashboard2.php");
             exit();
         } else {
@@ -34,12 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: Usuario no encontrado.";
     }
 }
+
+mysqli_close($enlace);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Iniciar Sesión</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;

@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']); // Asegúrate de que el ID sea un número entero
+    $id = intval($_GET['id']);
     $query = "DELETE FROM actividades WHERE id='$id'";
 
     if (mysqli_query($enlace, $query)) {
@@ -19,6 +19,8 @@ if (isset($_GET['id'])) {
 } else {
     $mensaje = "Error: ID de actividad no proporcionado.";
 }
+
+mysqli_close($enlace);
 ?>
 
 <!DOCTYPE html>
