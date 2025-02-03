@@ -33,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Insertar datos en la base de datos
     $query = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, acompañantes, ubicacion, coste, total_alumnos, objetivo, aprobada) VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$acompañantes', '$ubicacion', '$coste', '$total_alumnos', '$objetivo', 0)";
 
+    // Imprimir la consulta SQL para depuración
+    echo $query;
+
     if (mysqli_query($enlace, $query)) {
         echo "Actividad añadida correctamente.";
     } else {
@@ -105,6 +108,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .container a:hover {
             text-decoration: underline;
         }
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -119,7 +143,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option value="complementarias">Complementarias</option>
             </select>
             <label for="departamento">Departamento:</label>
-            <input type="text" id="departamento" name="departamento" required>
+            <button type="button" class="accordion">Seleccionar Departamento</button>
+            <div class="panel">
+                <input type="radio" id="informatica" name="departamento" value="Informática" required>
+                <label for="informatica">Informática</label><br>
+                <input type="radio" id="ef" name="departamento" value="EF" required>
+                <label for="ef">EF</label><br>
+                <input type="radio" id="lengua" name="departamento" value="Lengua" required>
+                <label for="lengua">Lengua</label><br>
+                <input type="radio" id="matematicas" name="departamento" value="Matemáticas" required>
+                <label for="matematicas">Matemáticas</label><br>
+                <input type="radio" id="historia" name="departamento" value="Historia" required>
+                <label for="historia">Historia</label><br>
+                <input type="radio" id="quimica" name="departamento" value="Química" required>
+                <label for="quimica">Química</label><br>
+                <input type="radio" id="fisica" name="departamento" value="Física" required>
+                <label for="fisica">Física</label><br>
+                <input type="radio" id="tecnologia" name="departamento" value="Tecnología" required>
+                <label for="tecnologia">Tecnología</label><br>
+                <input type="radio" id="filosofia" name="departamento" value="Filosofía" required>
+                <label for="filosofia">Filosofía</label><br>
+            </div>
             <label for="profesor_responsable">Profesor Responsable:</label>
             <input type="text" id="profesor_responsable" name="profesor_responsable" required>
             <label for="trimestre">Trimestre:</label>
@@ -152,5 +196,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         <a href="dashboard2.php">Volver al Dashboard</a>
     </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
 </body>
 </html>
