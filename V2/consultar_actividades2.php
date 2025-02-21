@@ -20,6 +20,20 @@ if (mysqli_num_rows($result) === 1) {
 
 $query = "SELECT * FROM actividades";
 $resultado = mysqli_query($enlace, $query);
+
+
+$query_total = "SELECT COUNT(*) as total FROM actividades";
+$query_aprobadas = "SELECT COUNT(*) as aprobadas FROM actividades WHERE aprobada = 1";
+$query_pendientes = "SELECT COUNT(*) as pendientes FROM actividades WHERE aprobada = 0";
+
+$result_total = mysqli_query($enlace, $query_total);
+$result_aprobadas = mysqli_query($enlace, $query_aprobadas);
+$result_pendientes = mysqli_query($enlace, $query_pendientes);
+
+$total = mysqli_fetch_assoc($result_total)['total'];
+$aprobadas = mysqli_fetch_assoc($result_aprobadas)['aprobadas'];
+$pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
+
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +148,11 @@ $resultado = mysqli_query($enlace, $query);
 <body>
     <h1>Actividades Registradas</h1>
     <table id="actividadesTable" border="1">
+    <div class="totales">
+        <p>Total de actividades: <?php echo $total; ?></p>
+        <p>Actividades aprobadas: <?php echo $aprobadas; ?></p>
+        <p>Actividades pendientes: <?php echo $pendientes; ?></p>
+    </div>
         <tr>
             <th onclick="sortTable(0)">Título</th>
             <th onclick="sortTable(1)">Tipo</th>

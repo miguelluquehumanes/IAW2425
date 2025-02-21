@@ -2,6 +2,11 @@
 session_start();
 include 'config.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['email']) || empty($_POST['password'])) {
         die("Error: Todos los campos son obligatorios.");
@@ -19,8 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $usuario['id'];
             $_SESSION['user_name'] = $usuario['nombre'];
             $_SESSION['user_role'] = $usuario['role'];
-            header("Location: dashboard2.php");
-            exit();
+            $query_update = "UPDATE usuarios SET ultima_conexion = NOW() WHERE id = '{$usuario['id']}'";
+            if (mysqli_query($enlace, $query_update)) {
+                // Redirigir solo si la consulta de actualización fue exitosa
+                header("Location: dashboard2.php");
+                exit();
+            } else {
+                echo "Error al actualizar la última conexión: " . mysqli_error($enlace);
+            }
         } else {
             echo "Error: Contraseña incorrecta.";
         }
@@ -28,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: Usuario no encontrado.";
     }
 }
+
 
 mysqli_close($enlace);
 ?>
