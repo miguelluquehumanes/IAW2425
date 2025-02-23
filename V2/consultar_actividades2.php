@@ -43,16 +43,18 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: background-color 0.3s, color 0.3s;
         }
         h1 {
             margin-top: 20px;
-            color: #333;
+        }
+        body.dark-mode h1 {
+            color: #fff; /* Asegura que el título sea visible en modo oscuro */
         }
         table {
             width: 90%;
@@ -70,11 +72,20 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
             color: #fff;
             cursor: pointer;
         }
+        body.dark-mode th {
+            background-color: #0056b3; /* Ajusta el color de fondo para modo oscuro */
+        }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        body.dark-mode tr:nth-child(even) {
+            background-color: #444; /* Ajusta el color de fondo para filas pares en modo oscuro */
+        }
         tr:hover {
             background-color: #f1f1f1;
+        }
+        body.dark-mode tr:hover {
+            background-color: #555; /* Ajusta el color de fondo para filas al pasar el ratón en modo oscuro */
         }
         a {
             text-decoration: none;
@@ -104,6 +115,19 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
         }
         .action-button:hover {
             background-color: #0056b3;
+        }
+        body.light-mode {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        body.dark-mode {
+            background-color: #333;
+            color: #f4f4f4;
+        }
+        .switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
     </style>
     <script>
@@ -143,9 +167,33 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
                 }
             }
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const modeSwitch = document.getElementById('modeSwitch');
+            const body = document.body;
+
+            // Cargar el modo guardado en localStorage
+            if (localStorage.getItem('mode') === 'dark') {
+                body.classList.add('dark-mode');
+                modeSwitch.checked = true;
+            } else {
+                body.classList.add('light-mode');
+                modeSwitch.checked = false;
+            }
+
+            modeSwitch.addEventListener('change', function() {
+                body.classList.toggle('dark-mode', this.checked);
+                body.classList.toggle('light-mode', !this.checked);
+                // Guardar el modo en localStorage
+                localStorage.setItem('mode', this.checked ? 'dark' : 'light');
+            });
+        });
     </script>
 </head>
 <body>
+<div class="switch">
+        <label for="modeSwitch">Modo Oscuro</label>
+        <input type="checkbox" id="modeSwitch">
+    </div>
     <h1>Actividades Registradas</h1>
     <table id="actividadesTable" border="1">
     <div class="totales">
