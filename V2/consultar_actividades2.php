@@ -8,19 +8,19 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$query = "SELECT rol FROM usuarios WHERE id = '$user_id'";
+$query = "SELECT rol, ultima_conexion FROM usuarios WHERE id = '$user_id'";
 $result = mysqli_query($enlace, $query);
 
 if (mysqli_num_rows($result) === 1) {
     $usuario = mysqli_fetch_assoc($result);
     $es_administrador = $usuario['rol'] === 'administrador';
+    $ultima_conexion = $usuario['ultima_conexion'];
 } else {
     die("Error: Usuario no encontrado.");
 }
 
 $query = "SELECT * FROM actividades";
 $resultado = mysqli_query($enlace, $query);
-
 
 $query_total = "SELECT COUNT(*) as total FROM actividades";
 $query_aprobadas = "SELECT COUNT(*) as aprobadas FROM actividades WHERE aprobada = 1";
@@ -33,7 +33,6 @@ $result_pendientes = mysqli_query($enlace, $query_pendientes);
 $total = mysqli_fetch_assoc($result_total)['total'];
 $aprobadas = mysqli_fetch_assoc($result_aprobadas)['aprobadas'];
 $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
-
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +54,14 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
         }
         body.dark-mode h1 {
             color: #fff; /* Asegura que el título sea visible en modo oscuro */
+        }
+        .welcome-message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #555;
+        }
+        body.dark-mode .welcome-message {
+            color: #bbb; /* Ajusta el color para modo oscuro */
         }
         table {
             width: 90%;
@@ -189,18 +196,21 @@ $pendientes = mysqli_fetch_assoc($result_pendientes)['pendientes'];
         });
     </script>
 </head>
-<body>
-<div class="switch">
+<body class="light-mode">
+    <div class="switch">
         <label for="modeSwitch">Modo Oscuro</label>
         <input type="checkbox" id="modeSwitch">
     </div>
+    <div class="welcome-message">
+        Bienvenido, <?php echo $_SESSION['user_name']; ?>. Última conexión: <?php echo $ultima_conexion; ?>
+    </div>
     <h1>Actividades Registradas</h1>
-    <table id="actividadesTable" border="1">
     <div class="totales">
         <p>Total de actividades: <?php echo $total; ?></p>
         <p>Actividades aprobadas: <?php echo $aprobadas; ?></p>
         <p>Actividades pendientes: <?php echo $pendientes; ?></p>
     </div>
+    <table id="actividadesTable" border="1">
         <tr>
             <th onclick="sortTable(0)">Título</th>
             <th onclick="sortTable(1)">Tipo</th>
