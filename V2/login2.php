@@ -2,11 +2,6 @@
 session_start();
 include 'config.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['email']) || empty($_POST['password'])) {
         die("Error: Todos los campos son obligatorios.");
@@ -39,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: Usuario no encontrado.";
     }
 }
-
 
 mysqli_close($enlace);
 ?>
